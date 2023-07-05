@@ -3,23 +3,24 @@ const player = {
   velocity: { x: 0, y: 0 },
   width: 32,
   height: 32,
-  maxSpeed: 4,
-  friction: 0.9,
+  maxSpeed: 3,
+  acceleration: 2,
+  friction: 0.5,
   sprite: new Sprite("sprites/template-16x16.png", 32, 32),
   update: function () {
     this.velocity.x *= this.friction;
     this.velocity.y *= this.friction;
     if (keys["w"]) {
-      this.velocity.y -= 1;
+      this.velocity.y -= this.acceleration;
     }
     if (keys["s"]) {
-      this.velocity.y += 1;
+      this.velocity.y += this.acceleration;
     }
     if (keys["a"]) {
-      this.velocity.x -= 1;
+      this.velocity.x -= this.acceleration;
     }
     if (keys["d"]) {
-      this.velocity.x += 1;
+      this.velocity.x += this.acceleration;
     }
     if (this.velocity.x > this.maxSpeed) {
       this.velocity.x = this.maxSpeed;

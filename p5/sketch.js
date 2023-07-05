@@ -14,32 +14,70 @@ const tileImages = [];
 let grid = [];
 
 // Width and height of each cell
-const DIM = 25;
+let DIMX = Math.ceil(window.innerWidth / 32);
+let DIMY = Math.ceil(window.innerHeight / 32);
 
 // Load images
+let obj = {};
 function preload() {
   const path = "grass";
-  let len = 11;
+  const path2 = "var";
+  let len = 14;
   for (let i = 0; i < len; i++) {
-    if(i < 10) tileImages[i] = loadImage(`${path}/grass0${i}.png`);
-    else tileImages[i] = loadImage(`${path}/grass${i}.png`);
+    if (i < 10) {
+      tileImages[i] = loadImage(`${path}/grass0${i}.png`);
+      obj[i] = { path: `${path}/grass0${i}.png` };
+    } else {
+      tileImages[i] = loadImage(`${path}/grass${i}.png`);
+      obj[i] = { path: `${path}/grass${i}.png` };
+    }
+  }
+  let len2 = 13;
+  for (let i = 0; i < len2; i++) {
+    if (i < 10) {
+      tileImages[len + i] = loadImage(`${path2}/var0${i}.png`);
+      obj[len + i] = { path: `${path2}/var0${i}.png` };
+    } else {
+      tileImages[len + i] = loadImage(`${path2}/var${i}.png`);
+      obj[len + i] = { path: `${path2}/var${i}.png` };
+    }
   }
 }
 let lib;
 function setup() {
-  createCanvas(400, 400);
-  
+  createCanvas(DIMX * 32, DIMY * 32);
+
   lib = {
-    grass: tileImages[1],
-    grassTop: tileImages[0],
-    grassTopLeft: tileImages[4],
-    grassLeft: tileImages[5],
-    grassBottomLeft: tileImages[6],
-    dirt: tileImages[2],
-    dirtTopRight: tileImages[3],
-    island: tileImages[8],
-    peninsulaTopLeft: tileImages[9],
-    peninsula: tileImages[10],
+    grassTop: tileImages[0], //
+    grass: tileImages[1], //
+    dirt: tileImages[2], //
+    dirtTopRight: tileImages[3], //
+    grassTopLeft: tileImages[4], //
+    grassLeft: tileImages[5], //
+    grassBottomLeft: tileImages[6], //
+    // island: tileImages[7],
+    grassRight: tileImages[7], //
+    grassTopRight: tileImages[8], //
+    grassBottomRight: tileImages[9], //
+    grassBottom: tileImages[10], //
+    dirtTopLeft: tileImages[11], //
+    dirtBottomLeft: tileImages[12], //
+    dirtBottomRight: tileImages[13], //
+
+    var1: tileImages[14],
+    var2: tileImages[15],
+    var3: tileImages[16],
+    var4: tileImages[17],
+
+    var5: tileImages[18],
+    var6: tileImages[19],
+    var7: tileImages[20],
+    var8: tileImages[21],
+    var9: tileImages[22],
+    var10: tileImages[23],
+    var11: tileImages[24],
+    var12: tileImages[25],
+    var13: tileImages[26],
   };
 
   // Key
@@ -50,29 +88,45 @@ function setup() {
   // DDD = grassBottom
   // EEE = grassLeft
 
-
   // Create and label the tiles
-  //                                                 TOP     RIGHT   BOTTOM  LEFT
-  tiles[0]  = new Tile(lib.grass,                     ["AAA",  "AAA",  "AAA",  "AAA"]); 
-  tiles[1]  = new Tile(lib.grassTop,                  ["AAA",  "BBB",  "ZZZ",  "BBB"]);
-  tiles[2]  = new Tile(lib.grassTopLeft,              ["AAA",  "BBB",  "EEE",  "AAA"]);
-  tiles[3]  = new Tile(lib.grassLeft,                 ["EEE",  "ZZZ",  "EEE",  "AAA"]);
-  tiles[4]  = new Tile(lib.grassBottomLeft,           ["EEE",  "DDD",  "AAA",  "AAA"]);
-  tiles[5]  = tiles[2].rotate(1); (tiles[5].edges =   ["AAA",  "AAA",  "CCC",  "BBB"]); // grassTopRight
-  tiles[6]  = tiles[3].rotate(2); (tiles[6].edges =   ["CCC",  "AAA",  "CCC",  "ZZZ"]); // grassRight
-  tiles[7]  = tiles[4].rotate(3); (tiles[7].edges =   ["CCC",  "AAA",  "AAA",  "DDD"]); // grassBottomRight
-  tiles[8]  = tiles[1].rotate(2); (tiles[8].edges =   ["ZZZ",  "DDD",  "AAA",  "DDD"]); // grassBottom
-  tiles[9]  = new Tile(lib.dirt,                      ["ZZZ",  "ZZZ",  "ZZZ",  "ZZZ"]); // dirt
-  tiles[10] = new Tile(lib.dirtTopRight,              ["ZZZ",  "ZZZ",  "EEE",  "DDD"]); // dirtTopRight
-  tiles[11] = tiles[10].rotate(3); (tiles[11].edges = ["ZZZ",  "DDD",  "CCC",  "ZZZ"]); // dirtTopLeft
-  tiles[12] = tiles[10].rotate(2); (tiles[12].edges = ["CCC",  "BBB",  "ZZZ",  "ZZZ"]); // dirtBottomLeft
-  tiles[13] = tiles[10].rotate(1); (tiles[13].edges = ["EEE",  "ZZZ",  "ZZZ",  "BBB"]); // dirtBottomRight
-  tiles[14] = new Tile(lib.island,                    ["ZZZ",  "ZZZ",  "ZZZ",  "ZZZ"]); // island
-  tiles[15] = new Tile(lib.peninsulaTopLeft,          ["ZZZ",  "BBB",  "CCC",  "KKK"]); // peninsulaTopLeft
-  tiles[16] = new Tile(lib.peninsula,                 ["ZZZ",  "KKK",  "ZZZ",  "ZZZ"]); // peninsulaTopRight
+  //                                                   TOP     RIGHT   BOTTOM  LEFT
+  tiles[0] = new Tile(lib.grassTop, ["AAA", "BBB", "ZZZ", "BBB"]);
+  tiles[1] = new Tile(lib.grass, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[2] = new Tile(lib.dirt, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]); // dirt
+  tiles[3] = new Tile(lib.dirtTopRight, ["ZZZ", "ZZZ", "EEE", "DDD"]); // dirtTopRight
+  tiles[4] = new Tile(lib.grassTopLeft, ["AAA", "BBB", "EEE", "AAA"]);
+  tiles[5] = new Tile(lib.grassLeft, ["EEE", "ZZZ", "EEE", "AAA"]);
+  tiles[6] = new Tile(lib.grassBottomLeft, ["EEE", "DDD", "AAA", "AAA"]);
+  tiles[7] = new Tile(lib.grassRight, ["CCC", "AAA", "CCC", "ZZZ"]); // grassRight
+  tiles[8] = new Tile(lib.grassTopRight, ["AAA", "AAA", "CCC", "BBB"]); // grassTopRight
+  tiles[9] = new Tile(lib.grassBottomRight, ["CCC", "AAA", "AAA", "DDD"]); // grassBottomRight
+  tiles[10] = new Tile(lib.grassBottom, ["ZZZ", "DDD", "AAA", "DDD"]); // grassBottom
+  tiles[11] = new Tile(lib.dirtTopLeft, ["ZZZ", "DDD", "CCC", "ZZZ"]); // dirtTopLeft
+  tiles[12] = new Tile(lib.dirtBottomLeft, ["CCC", "BBB", "ZZZ", "ZZZ"]); // dirtBottomLeft
+  tiles[13] = new Tile(lib.dirtBottomRight, ["EEE", "ZZZ", "ZZZ", "BBB"]); // dirtBottomRight
+  // insert at 7th index
+
+  // tiles[7] = new Tile(lib.dirt,                       ["ZZZ",  "ZZZ",  "ZZZ",  "ZZZ"]);
+
+  tiles[14] = new Tile(lib.var1, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[15] = new Tile(lib.var2, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[16] = new Tile(lib.var3, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[17] = new Tile(lib.var4, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[18] = new Tile(lib.var5, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[19] = new Tile(lib.var6, ["AAA", "AAA", "AAA", "AAA"]);
+
+  tiles[20] = new Tile(lib.var7, ["AAA", "AAA", "AAA", "AAA"]);
+  tiles[21] = new Tile(lib.var8, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+  tiles[22] = new Tile(lib.var9, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+  tiles[23] = new Tile(lib.var10, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+  tiles[24] = new Tile(lib.var11, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+  tiles[25] = new Tile(lib.var12, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+  tiles[26] = new Tile(lib.var13, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]);
+
   // Generate the adjacency rules based on edges
   for (let i = 0; i < tiles.length; i++) {
     const tile = tiles[i];
+    tile.id = i;
     tile.analyze(tiles);
   }
 
@@ -82,8 +136,8 @@ function setup() {
 
 function startOver() {
   // Create cell for each spot on the grid
-  for (let i = 0; i < DIM * DIM; i++) {
-    grid[i] = new Cell(tiles.length);
+  for (let i = 0; i < DIMX * DIMY; i++) {
+    grid[i] = new Cell(tiles.length, null);
   }
 }
 
@@ -105,13 +159,15 @@ function draw() {
   background(0);
 
   // Draw the grid
-  const w = width / DIM;
-  const h = height / DIM;
-  for (let j = 0; j < DIM; j++) {
-    for (let i = 0; i < DIM; i++) {
-      let cell = grid[i + j * DIM];
+  const w = width / DIMX;
+  const h = height / DIMY;
+  for (let j = 0; j < DIMY; j++) {
+    for (let i = 0; i < DIMX; i++) {
+      let cell = grid[i + j * DIMX];
       if (cell.collapsed) {
         let index = cell.options[0];
+        cell.id = tiles[index].id;
+        if (tiles[index].rotated != null) cell.rotated = tiles[index].rotated;
         image(tiles[index].img, i * w, j * h, w, h);
       } else {
         fill(0);
@@ -161,16 +217,16 @@ function draw() {
 
   // Calculate entropy
   const nextGrid = [];
-  for (let j = 0; j < DIM; j++) {
-    for (let i = 0; i < DIM; i++) {
-      let index = i + j * DIM;
+  for (let j = 0; j < DIMY; j++) {
+    for (let i = 0; i < DIMX; i++) {
+      let index = i + j * DIMX;
       if (grid[index].collapsed) {
         nextGrid[index] = grid[index];
       } else {
         let options = new Array(tiles.length).fill(0).map((x, i) => i);
         // Look up
         if (j > 0) {
-          let up = grid[i + (j - 1) * DIM];
+          let up = grid[i + (j - 1) * DIMX];
           let validOptions = [];
           for (let option of up.options) {
             let valid = tiles[option].down;
@@ -179,8 +235,8 @@ function draw() {
           checkValid(options, validOptions);
         }
         // Look right
-        if (i < DIM - 1) {
-          let right = grid[i + 1 + j * DIM];
+        if (i < DIMX - 1) {
+          let right = grid[i + 1 + j * DIMX];
           let validOptions = [];
           for (let option of right.options) {
             let valid = tiles[option].left;
@@ -189,8 +245,8 @@ function draw() {
           checkValid(options, validOptions);
         }
         // Look down
-        if (j < DIM - 1) {
-          let down = grid[i + (j + 1) * DIM];
+        if (j < DIMY - 1) {
+          let down = grid[i + (j + 1) * DIMX];
           let validOptions = [];
           for (let option of down.options) {
             let valid = tiles[option].up;
@@ -200,7 +256,7 @@ function draw() {
         }
         // Look left
         if (i > 0) {
-          let left = grid[i - 1 + j * DIM];
+          let left = grid[i - 1 + j * DIMX];
           let validOptions = [];
           for (let option of left.options) {
             let valid = tiles[option].right;
@@ -216,4 +272,22 @@ function draw() {
   }
 
   grid = nextGrid;
+  
+}
+
+function saveGrid() {
+  let keys = Object.keys(lib);
+  let obj2 = {};
+  for (let i = 0; i < keys.length; i++) {
+    if (lib[keys[i]] === tiles[i].img) {
+      obj2[i] = keys[i];
+    }
+  }
+  return {
+    width: DIMX,
+    height: DIMY,
+    grid: grid.map((x) => x.id),
+    key1: obj2,
+    key2: obj,
+  };
 }

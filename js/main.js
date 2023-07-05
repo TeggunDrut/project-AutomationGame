@@ -11,242 +11,261 @@ class Map {
   draw() {
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].x = j * SIZE;
-        this.map[i][j].y = i * SIZE;
+        this.map[i][j].x = j * SIZEX;
+        this.map[i][j].y = i * SIZEY;
         this.map[i][j].draw();
       }
     }
   }
 }
 
-let grassLib = {
-  full: "13",
-  island: "00",
-  islandRight: "01",
-  islandLeft: "07",
-  islandTop: "15",
-  top: "05",
-  topLeft: "20",
-  topRight: "06",
-  right: "27",
-  left: "38",
-  bottom: "45",
-  bottomLeft: "28",
-  bottomRight: "43",
+let obj = {
+  width: 60,
+  height: 34,
+  grid: [
+    3, 21, 12, 13, 24, 11, 9, 15, 18, 19, 6, 3, 23, 21, 25, 23, 22, 25, 25, 26,
+    24, 7, 17, 17, 15, 20, 17, 5, 12, 0, 8, 6, 3, 25, 2, 7, 19, 18, 15, 1, 19,
+    14, 20, 4, 0, 8, 17, 14, 15, 5, 22, 25, 11, 3, 7, 6, 9, 14, 19, 6, 13, 23,
+    11, 3, 25, 12, 0, 8, 4, 8, 20, 6, 10, 3, 23, 25, 22, 22, 11, 10, 10, 9, 4,
+    0, 8, 14, 16, 5, 24, 11, 9, 20, 6, 3, 11, 9, 19, 16, 20, 4, 8, 14, 16, 6,
+    10, 9, 20, 18, 14, 5, 23, 21, 7, 5, 12, 0, 0, 8, 1, 20, 11, 3, 7, 6, 3, 24,
+    11, 9, 6, 9, 4, 0, 8, 6, 3, 26, 24, 11, 9, 18, 4, 0, 13, 21, 7, 19, 14, 5,
+    23, 7, 1, 4, 0, 13, 7, 19, 18, 16, 4, 13, 12, 0, 0, 8, 17, 18, 4, 8, 19, 6,
+    3, 11, 9, 6, 3, 21, 26, 12, 8, 16, 12, 13, 7, 1, 5, 22, 7, 20, 14, 15, 5,
+    21, 7, 1, 5, 11, 10, 9, 4, 8, 5, 22, 23, 11, 9, 17, 15, 5, 24, 7, 15, 6, 10,
+    10, 9, 18, 14, 15, 6, 3, 24, 11, 3, 12, 0, 0, 13, 7, 14, 4, 13, 12, 8, 18,
+    6, 10, 10, 10, 9, 15, 11, 3, 12, 8, 6, 10, 9, 17, 16, 4, 13, 22, 12, 8, 5,
+    12, 0, 8, 6, 9, 6, 10, 10, 9, 1, 4, 0, 13, 11, 9, 19, 17, 17, 15, 18, 20,
+    15, 19, 16, 6, 3, 7, 5, 11, 3, 25, 23, 7, 4, 13, 11, 10, 9, 4, 0, 0, 0, 8,
+    14, 20, 7, 6, 3, 12, 8, 16, 15, 14, 20, 5, 24, 22, 25, 12, 13, 21, 22, 7,
+    17, 4, 0, 0, 0, 8, 20, 6, 3, 11, 9, 1, 15, 16, 16, 15, 18, 17, 15, 15, 4, 0,
+    13, 12, 13, 7, 6, 3, 25, 7, 6, 10, 9, 4, 0, 13, 24, 25, 26, 7, 14, 18, 9,
+    18, 6, 3, 12, 8, 16, 17, 1, 6, 3, 26, 2, 21, 22, 22, 2, 12, 8, 6, 10, 3, 26,
+    12, 0, 8, 5, 12, 0, 8, 20, 4, 0, 0, 8, 15, 15, 1, 6, 3, 25, 2, 11, 9, 18, 6,
+    3, 7, 4, 8, 14, 5, 11, 3, 22, 24, 26, 7, 16, 16, 17, 19, 20, 6, 10, 9, 14,
+    18, 4, 0, 13, 24, 11, 10, 10, 10, 10, 3, 12, 0, 8, 5, 2, 26, 26, 7, 5, 21,
+    21, 12, 0, 13, 26, 23, 7, 15, 20, 15, 1, 5, 25, 23, 12, 0, 0, 8, 5, 12, 13,
+    12, 0, 13, 7, 5, 2, 23, 24, 12, 0, 8, 14, 20, 14, 17, 4, 0, 8, 4, 13, 25,
+    11, 3, 7, 14, 1, 17, 17, 5, 23, 25, 7, 6, 10, 10, 10, 9, 6, 3, 25, 21, 22,
+    26, 23, 22, 12, 8, 16, 4, 0, 13, 11, 3, 23, 23, 24, 12, 13, 22, 25, 23, 11,
+    10, 9, 5, 2, 23, 2, 11, 10, 9, 19, 4, 8, 4, 13, 25, 7, 6, 10, 3, 12, 13, 7,
+    14, 18, 19, 16, 5, 11, 10, 9, 17, 4, 8, 4, 8, 4, 13, 22, 26, 2, 26, 11, 3,
+    21, 12, 0, 13, 2, 24, 7, 6, 10, 10, 3, 24, 26, 22, 26, 25, 12, 0, 0, 13, 21,
+    24, 25, 7, 18, 1, 4, 13, 12, 13, 26, 22, 7, 20, 17, 6, 10, 10, 9, 18, 4, 8,
+    4, 13, 7, 19, 15, 4, 13, 12, 13, 7, 5, 11, 3, 21, 11, 3, 7, 5, 24, 22, 21,
+    22, 11, 10, 9, 20, 19, 16, 6, 10, 10, 10, 3, 22, 11, 10, 10, 10, 10, 10, 3,
+    7, 14, 19, 5, 2, 25, 2, 21, 25, 7, 17, 19, 15, 4, 0, 0, 8, 5, 12, 13, 23,
+    12, 8, 17, 5, 25, 11, 3, 12, 13, 12, 13, 23, 12, 13, 12, 13, 24, 24, 25, 11,
+    9, 20, 4, 0, 8, 4, 8, 16, 16, 15, 6, 10, 9, 17, 4, 8, 1, 4, 13, 7, 16, 19,
+    13, 26, 11, 3, 22, 23, 12, 8, 19, 18, 5, 26, 11, 9, 6, 3, 11, 3, 21, 7, 15,
+    5, 25, 7, 5, 21, 11, 3, 25, 11, 10, 3, 25, 2, 11, 10, 3, 12, 8, 18, 6, 3, 7,
+    6, 9, 19, 4, 0, 8, 4, 0, 0, 13, 7, 16, 6, 10, 9, 16, 15, 23, 2, 7, 5, 11, 3,
+    25, 12, 8, 4, 13, 23, 7, 14, 19, 5, 7, 5, 23, 12, 8, 6, 10, 9, 5, 24, 7, 6,
+    3, 12, 8, 6, 10, 3, 12, 8, 6, 3, 7, 19, 4, 13, 12, 0, 8, 16, 5, 11, 9, 6, 3,
+    24, 11, 9, 19, 17, 14, 15, 16, 14, 2, 23, 12, 13, 12, 13, 2, 11, 9, 6, 10,
+    3, 7, 20, 16, 6, 9, 6, 10, 3, 7, 14, 14, 1, 5, 11, 9, 16, 5, 11, 9, 20, 4,
+    13, 24, 7, 19, 5, 12, 8, 6, 3, 26, 25, 7, 17, 5, 12, 0, 8, 6, 3, 12, 8, 4,
+    0, 8, 19, 20, 15, 25, 2, 26, 11, 3, 11, 3, 7, 4, 0, 0, 13, 7, 20, 18, 4, 8,
+    4, 0, 13, 12, 8, 20, 4, 13, 12, 8, 19, 6, 9, 4, 8, 6, 10, 3, 7, 4, 13, 24,
+    7, 4, 13, 11, 3, 12, 8, 6, 3, 22, 12, 8, 6, 3, 7, 5, 23, 7, 15, 20, 20, 24,
+    26, 24, 7, 6, 9, 6, 9, 6, 3, 11, 10, 9, 17, 15, 6, 9, 5, 24, 2, 11, 9, 19,
+    6, 10, 10, 9, 17, 18, 14, 5, 7, 18, 1, 6, 9, 5, 11, 10, 9, 6, 3, 12, 13, 25,
+    12, 8, 5, 24, 11, 9, 16, 5, 12, 13, 11, 9, 4, 8, 19, 2, 24, 25, 7, 18, 15,
+    4, 0, 0, 13, 7, 4, 0, 0, 8, 4, 0, 13, 24, 21, 7, 4, 0, 0, 8, 19, 20, 4, 8,
+    20, 5, 12, 0, 8, 19, 17, 5, 7, 17, 16, 1, 5, 11, 3, 21, 22, 12, 13, 11, 9,
+    15, 20, 6, 10, 10, 9, 16, 6, 9, 19, 25, 11, 10, 9, 4, 0, 13, 23, 11, 10, 9,
+    6, 3, 11, 9, 5, 25, 24, 25, 22, 7, 5, 11, 10, 9, 4, 0, 13, 7, 17, 5, 26, 22,
+    12, 0, 8, 5, 7, 16, 17, 14, 6, 9, 6, 10, 3, 26, 2, 7, 18, 4, 0, 0, 0, 0, 0,
+    0, 8, 16, 15, 25, 12, 0, 0, 13, 11, 10, 3, 12, 0, 0, 0, 13, 7, 4, 13, 2, 2,
+    26, 24, 7, 5, 12, 0, 8, 5, 11, 3, 7, 4, 13, 22, 24, 2, 11, 9, 6, 9, 1, 4, 0,
+    8, 4, 8, 19, 6, 10, 10, 9, 17, 5, 11, 10, 3, 24, 24, 23, 12, 8, 15, 11, 3,
+    24, 11, 3, 7, 20, 5, 11, 10, 10, 3, 24, 12, 13, 22, 11, 10, 10, 10, 9, 5, 2,
+    11, 9, 6, 9, 6, 9, 6, 3, 25, 11, 3, 7, 4, 0, 0, 0, 13, 21, 7, 5, 12, 8, 18,
+    17, 19, 20, 1, 6, 9, 17, 5, 23, 25, 25, 22, 7, 17, 12, 13, 23, 7, 6, 9, 16,
+    6, 9, 4, 0, 13, 2, 11, 3, 11, 9, 14, 19, 1, 16, 5, 11, 9, 4, 0, 8, 4, 0, 8,
+    6, 3, 7, 6, 9, 6, 10, 3, 26, 22, 24, 12, 13, 21, 12, 8, 20, 20, 17, 17, 4,
+    0, 0, 13, 24, 21, 26, 24, 7, 1, 24, 21, 26, 12, 8, 18, 4, 8, 4, 13, 23, 2,
+    24, 12, 13, 12, 0, 8, 14, 17, 17, 6, 9, 16, 6, 3, 12, 13, 11, 9, 4, 13, 12,
+    8, 1, 14, 19, 5, 2, 22, 26, 11, 10, 3, 22, 7, 1, 1, 4, 0, 13, 25, 11, 10,
+    10, 10, 3, 26, 12, 8, 10, 10, 3, 11, 9, 16, 5, 12, 13, 23, 24, 22, 11, 10,
+    10, 10, 10, 9, 15, 15, 20, 4, 8, 20, 4, 13, 21, 22, 12, 0, 13, 11, 3, 12, 0,
+    0, 8, 6, 10, 3, 25, 12, 0, 13, 26, 12, 0, 8, 5, 11, 3, 21, 12, 8, 15, 4, 13,
+    2, 26, 7, 17, 4, 13, 12, 0, 0, 13, 2, 11, 10, 3, 11, 9, 4, 8, 14, 17, 1, 18,
+    14, 16, 5, 12, 0, 13, 24, 25, 26, 26, 23, 26, 12, 13, 11, 10, 10, 9, 4, 8,
+    5, 25, 11, 10, 10, 10, 10, 10, 9, 5, 7, 5, 2, 23, 12, 8, 6, 3, 22, 26, 12,
+    17, 5, 11, 3, 25, 23, 26, 26, 7, 4, 13, 7, 4, 13, 7, 14, 1, 4, 8, 19, 14, 6,
+    10, 3, 21, 21, 24, 25, 23, 23, 11, 3, 21, 12, 0, 8, 20, 5, 7, 5, 22, 7, 4,
+    8, 1, 18, 16, 1, 6, 9, 5, 23, 26, 22, 7, 17, 6, 10, 10, 3, 4, 13, 7, 5, 11,
+    10, 10, 3, 7, 5, 2, 7, 5, 22, 12, 8, 16, 6, 9, 14, 14, 17, 4, 13, 2, 11, 10,
+    10, 3, 11, 9, 5, 23, 24, 22, 7, 4, 13, 12, 13, 11, 9, 5, 7, 15, 14, 16, 20,
+    18, 15, 5, 25, 26, 26, 7, 17, 1, 20, 4, 13, 6, 10, 9, 6, 9, 17, 4, 13, 7, 6,
+    10, 9, 6, 3, 21, 12, 8, 19, 4, 8, 20, 14, 6, 10, 3, 7, 4, 0, 13, 12, 0, 13,
+    11, 10, 3, 7, 5, 2, 22, 26, 7, 14, 5, 12, 0, 0, 8, 18, 19, 20, 6, 10, 3, 22,
+    7, 4, 8, 4, 13, 11, 4, 0, 0, 8, 4, 8, 5, 21, 7, 14, 1, 4, 0, 13, 11, 10, 9,
+    14, 5, 7, 16, 18, 14, 14, 5, 7, 6, 10, 10, 10, 3, 24, 12, 0, 13, 12, 13, 22,
+    26, 11, 9, 4, 13, 21, 25, 24, 7, 16, 19, 4, 8, 4, 13, 11, 9, 5, 7, 5, 22,
+    12, 5, 25, 26, 7, 5, 12, 13, 2, 12, 0, 0, 13, 11, 3, 7, 18, 17, 4, 13, 7, 1,
+    1, 20, 20, 6, 9, 4, 8, 18, 16, 6, 10, 10, 10, 10, 10, 3, 11, 10, 9, 17, 5,
+    21, 23, 11, 3, 7, 19, 19, 5, 12, 13, 22, 12, 0, 13, 7, 5, 25, 11, 13, 26,
+    25, 7, 6, 3, 26, 26, 2, 11, 10, 10, 9, 6, 9, 14, 18, 6, 3, 7, 17, 1, 15, 17,
+    15, 4, 13, 7, 19, 4, 0, 8, 14, 16, 14, 16, 5, 7, 20, 18, 1, 5, 25, 23, 7, 6,
+    9, 14, 18, 6, 10, 10, 10, 3, 11, 10, 9, 6, 3, 7, 26, 24, 23, 12, 0, 13, 21,
+    25, 11, 9, 17, 19, 16, 17, 15, 14, 15, 1, 5, 7, 20, 17, 19, 14, 4, 13, 25,
+    7, 19, 5, 11, 9, 19, 1, 1, 1, 5, 7, 17, 4, 8, 5, 21, 24, 12, 0, 8, 4, 0, 0,
+    0, 0, 8, 5, 12, 8, 4, 0, 13, 7, 22, 25, 26, 23, 24, 23, 11, 10, 9, 20, 18,
+    18, 20, 20, 15, 19, 20, 19, 5, 7, 19, 14, 18, 20, 6, 10, 10, 9, 20, 5, 12,
+    8, 14, 14, 4, 0, 13, 12, 8, 6, 9, 5, 25, 11, 3, 22, 12, 13, 22, 11, 10, 10,
+    9, 5, 22, 12, 13, 22, 23, 7, 11, 10, 3, 23, 23, 22, 7, 15, 16, 16, 16, 19,
+    1, 18, 15, 14, 4, 8, 5, 7, 20, 18, 16, 1, 15, 18, 1, 18, 1, 6, 10, 9, 17,
+    19, 5, 22, 26, 24, 7, 4, 0, 13, 22, 7, 6, 10, 10, 10, 3, 12, 8, 18, 18, 6,
+    3, 24, 21, 2, 22, 12,
+  ],
+  key1: {
+    0: "grassTop",
+    1: "grass",
+    2: "dirt",
+    3: "dirtTopRight",
+    4: "grassTopLeft",
+    5: "grassLeft",
+    6: "grassBottomLeft",
+    7: "grassRight",
+    8: "grassTopRight",
+    9: "grassBottomRight",
+    10: "grassBottom",
+    11: "dirtTopLeft",
+    12: "dirtBottomLeft",
+    13: "dirtBottomRight",
+    14: "var1",
+    15: "var2",
+    16: "var3",
+    17: "var4",
+    18: "var5",
+    19: "var6",
+    20: "var7",
+    21: "var8",
+    22: "var9",
+    23: "var10",
+    24: "var11",
+    25: "var12",
+    26: "var13",
+  },
+  key2: {
+    0: {
+      path: "grass/grass00.png",
+    },
+    1: {
+      path: "grass/grass01.png",
+    },
+    2: {
+      path: "grass/grass02.png",
+    },
+    3: {
+      path: "grass/grass03.png",
+    },
+    4: {
+      path: "grass/grass04.png",
+    },
+    5: {
+      path: "grass/grass05.png",
+    },
+    6: {
+      path: "grass/grass06.png",
+    },
+    7: {
+      path: "grass/grass07.png",
+    },
+    8: {
+      path: "grass/grass08.png",
+    },
+    9: {
+      path: "grass/grass09.png",
+    },
+    10: {
+      path: "grass/grass10.png",
+    },
+    11: {
+      path: "grass/grass11.png",
+    },
+    12: {
+      path: "grass/grass12.png",
+    },
+    13: {
+      path: "grass/grass13.png",
+    },
+    14: {
+      path: "var/var00.png",
+    },
+    15: {
+      path: "var/var01.png",
+    },
+    16: {
+      path: "var/var02.png",
+    },
+    17: {
+      path: "var/var03.png",
+    },
+    18: {
+      path: "var/var04.png",
+    },
+    19: {
+      path: "var/var05.png",
+    },
+    20: {
+      path: "var/var06.png",
+    },
+    21: {
+      path: "var/var07.png",
+    },
+    22: {
+      path: "var/var08.png",
+    },
+    23: {
+      path: "var/var09.png",
+    },
+    24: {
+      path: "var/var10.png",
+    },
+    25: {
+      path: "var/var11.png",
+    },
+    26: {
+      path: "var/var12.png",
+    },
+  },
 };
-let dirtLib = {
-  full: "11",
-}
 
 function getTile(id, parent) {
-  return new Tile("sprites/grass/grass" + id + ".png", SIZE, SIZE, parent);
+  if (id < 10) {
+    return new Tile(obj.key2[id].path, SIZEX, SIZEY, parent);
+  }
+  return new Tile(obj.key2[id].path, SIZEX, SIZEY, parent);
 }
 
-let grass = new Tile(
-  "sprites/grass/grass" + grassLib.island + ".png",
-  SIZE,
-  SIZE,
-  map
+map = new Map(
+  new Array(obj.height).fill(0).map(() => new Array(obj.width).fill(0))
 );
-map = new Map([
-  [getTile(grassLib.full, map), getTile(grassLib.island, map)],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-]);
+
+for (let j = 0; j < obj.height; j++) {
+  for (let i = 0; i < obj.width; i++) {
+    map.map[j][i] = getTile(obj.grid[j * obj.width + i], map);
+  }
+}
 
 // TODO: Use WFC to make siomple level?
 
-const tiles = [];
-const tileImages = [];
-
-let grid = [];
-
-const DIM = 16;
-
-function setup() {
-  tileImages[0] = loadImage("sprites/grass/grass" + grassLib.full + ".png");
-  tileImages[1] = loadImage("sprites/grass/grass" + grassLib.top + ".png");
-  tileImages[2] = loadImage("sprites/grass/grass" + grassLib.bottom + ".png");
-  tileImages[3] = loadImage("sprites/grass/grass" + grassLib.left + ".png");
-  tileImages[4] = loadImage("sprites/grass/grass" + grassLib.right + ".png");
-  tileImages[5] = loadImage("sprites/grass/grass" + grassLib.topLeft + ".png");
-  tileImages[6] = loadImage("sprites/grass/grass" + grassLib.topRight + ".png");
-  tileImages[7] = loadImage(
-    "sprites/grass/grass" + grassLib.bottomLeft + ".png"
-  );
-  tileImages[8] = loadImage(
-    "sprites/grass/grass" + grassLib.bottomRight + ".png"
-  );
-  tileImages[9] = loadImage("sprites/dirt/dirt00.png");
-
-  tiles[0] = new WFCTile(tileImages[0], ["AAA", "AAA", "AAA", "AAA"]);
-  tiles[1] = new WFCTile(tileImages[1], ["AAA", "ABA", "BBB", "ABA"]);
-  tiles[2] = new WFCTile(tileImages[9], ["BBB", "BBB", "BBB", "BBB"]);
-
-  //rotate tiles
-  let len = tiles.length;
-  for (let i = 0; i < len; i++) {
-    const tile = tiles[i];
-    for (let j = 0; j < 3; j++) {
-      tiles.push(tile.rotate(j));
-    }
-  }
-
-  // Generate the adjacency rules based on edges
-  for (let i = 0; i < tiles.length; i++) {
-    const tile = tiles[i];
-    tile.analyze(tiles);
-  }
-  startOver();
+function init() {
+  SIZEX = width / map.map[0].length
+  SIZEY = height / map.map.length;
 }
-
-function startOver() {
-  // Create cell for each spot on the grid
-  for (let i = 0; i < DIM * DIM; i++) {
-    grid[i] = new Cell(tiles.length);
-  }
-}
-
-function init() {}
 
 function render() {
   requestAnimationFrame(render);
+
+  map.draw();
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
   player.update();
   player.draw();
 
-  map.draw();
   // basicTileset.draw();
 }
 requestAnimationFrame(render);
-function checkValid(arr, valid) {
-  for (let i = arr.length - 1; i >= 0; i--) {
-    let element = arr[i];
-    if (!valid.includes(element)) {
-      arr.splice(i, 1);
-    }
-  }
-}
-function draw() {
-  background(0);
-
-  // Draw the grid
-  const w = width / DIM;
-  const h = height / DIM;
-  for (let j = 0; j < DIM; j++) {
-    for (let i = 0; i < DIM; i++) {
-      let cell = grid[i + j * DIM];
-      if (cell.collapsed) {
-        let index = cell.options[0];
-        image(tiles[index].img, i * w, j * h, w, h);
-      } else {
-        fill(0);
-        stroke(100);
-        rect(i * w, j * h, w, h);
-      }
-    }
-  }
-
-  // Make a copy of grid
-  let gridCopy = grid.slice();
-  // Remove any collapsed cells
-  gridCopy = gridCopy.filter((a) => !a.collapsed);
-
-  // The algorithm has completed if everything is collapsed
-  if (grid.length == 0) {
-    return;
-  }
-
-  // Pick a cell with least entropy
-
-  // Sort by entropy
-  gridCopy.sort((a, b) => {
-    return a.options.length - b.options.length;
-  });
-
-  // Keep only the lowest entropy cells
-  let len = gridCopy[0].options.length;
-  let stopIndex = 0;
-  for (let i = 1; i < gridCopy.length; i++) {
-    if (gridCopy[i].options.length > len) {
-      stopIndex = i;
-      break;
-    }
-  }
-  if (stopIndex > 0) gridCopy.splice(stopIndex);
-
-  // Collapse a cell
-  const cell = random(gridCopy);
-  cell.collapsed = true;
-  const pick = random(cell.options);
-  if (pick === undefined) {
-    startOver();
-    return;
-  }
-  cell.options = [pick];
-
-  // Calculate entropy
-  const nextGrid = [];
-  for (let j = 0; j < DIM; j++) {
-    for (let i = 0; i < DIM; i++) {
-      let index = i + j * DIM;
-      if (grid[index].collapsed) {
-        nextGrid[index] = grid[index];
-      } else {
-        let options = new Array(tiles.length).fill(0).map((x, i) => i);
-        // Look up
-        if (j > 0) {
-          let up = grid[i + (j - 1) * DIM];
-          let validOptions = [];
-          for (let option of up.options) {
-            let valid = tiles[option].down;
-            validOptions = validOptions.concat(valid);
-          }
-          checkValid(options, validOptions);
-        }
-        // Look right
-        if (i < DIM - 1) {
-          let right = grid[i + 1 + j * DIM];
-          let validOptions = [];
-          for (let option of right.options) {
-            let valid = tiles[option].left;
-            validOptions = validOptions.concat(valid);
-          }
-          checkValid(options, validOptions);
-        }
-        // Look down
-        if (j < DIM - 1) {
-          let down = grid[i + (j + 1) * DIM];
-          let validOptions = [];
-          for (let option of down.options) {
-            let valid = tiles[option].up;
-            validOptions = validOptions.concat(valid);
-          }
-          checkValid(options, validOptions);
-        }
-        // Look left
-        if (i > 0) {
-          let left = grid[i - 1 + j * DIM];
-          let validOptions = [];
-          for (let option of left.options) {
-            let valid = tiles[option].right;
-            validOptions = validOptions.concat(valid);
-          }
-          checkValid(options, validOptions);
-        }
-
-        // I could immediately collapse if only one option left?
-        nextGrid[index] = new Cell(options);
-      }
-    }
-  }
-
-  grid = nextGrid;
-}

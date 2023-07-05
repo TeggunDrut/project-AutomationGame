@@ -1,13 +1,14 @@
 let canvas = document.querySelector("#canvas");
 let ctx = canvas.getContext("2d");
-// canvas.width = window.innerWidth;
-// canvas.height = window.innerHeight
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight
 let width = canvas.width;
 let height = canvas.height;
 let mouse = { x: 0, y: 0, down: false };
 let keys = {};
 
-const SIZE = 32;
+let SIZEX = 32;
+let SIZEY = 32;
 
 const SPRITE_PATH = "sprites/";
 const TILES = {
@@ -24,7 +25,7 @@ function addSprites(path, prefix, count) {
     if (i < 10) {
       i = "0" + i;
     }
-    arr.push(new Tile(path + prefix + i + ".png", SIZE, SIZE, null));
+    arr.push(new Tile(path + prefix + i + ".png", SIZEX, SIZEY, null));
   }
   return arr;
 }

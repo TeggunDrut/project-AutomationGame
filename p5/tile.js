@@ -25,6 +25,8 @@ class Tile {
     this.img = img;
     // Edges
     this.edges = edges;
+    // ID
+    this.id = 0;
     // Valid neighbors
     this.up = [];
     this.right = [];
