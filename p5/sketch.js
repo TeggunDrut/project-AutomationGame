@@ -44,8 +44,10 @@ function preload() {
   }
 }
 let lib;
+let sizeX = 32;
+let sizeY = 32;
 function setup() {
-  createCanvas(DIMX * 32, DIMY * 32);
+  createCanvas(DIMX * sizeX, DIMY * sizeY);
 
   lib = {
     grassTop: tileImages[0], //

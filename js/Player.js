@@ -1,8 +1,8 @@
 const player = {
   position: { x: width / 2, y: height / 2 },
   velocity: { x: 0, y: 0 },
-  width: 32,
-  height: 32,
+  width: SIZEX,
+  height: SIZEY,
   maxSpeed: 3,
   acceleration: 2,
   friction: 0.5,
@@ -49,6 +49,6 @@ const player = {
   draw: function () {
     // ctx.fillStyle = "red";
     // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-    ctx.drawImage(this.sprite.img, this.position.x, this.position.y, this.width, this.height)
+    ctx.drawImage(this.sprite.img, this.position.x, this.position.y, SIZEX, SIZEY)
   },
 };
