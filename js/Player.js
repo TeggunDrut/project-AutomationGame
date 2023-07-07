@@ -49,6 +49,7 @@ const player = {
   draw: function () {
     // ctx.fillStyle = "red";
     // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-    ctx.drawImage(this.sprite.img, this.position.x, this.position.y, SIZEX, SIZEY)
+    // ctx.drawImage(this.sprite.img, this.position.x, this.position.y, SIZEX, SIZEY)
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
   },
 };

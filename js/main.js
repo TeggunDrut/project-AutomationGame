@@ -1,23 +1,5 @@
-let basicTileset;
-
-let map;
-
-class Map {
-  constructor(map) {
-    this.map = map;
-    this.width = this.map[0].length;
-    this.height = this.map.length;
-  }
-  draw() {
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].x = j * SIZEX;
-        this.map[i][j].y = i * SIZEY;
-        this.map[i][j].draw();
-      }
-    }
-  }
-}
+let basicTileset, machine1;
+let machines = [];
 
 let obj = {
   width: 60,
@@ -241,7 +223,7 @@ function getTile(id, parent) {
   return new Tile(obj.key2[id].path, SIZEX, SIZEY, parent);
 }
 
-map = new Map(
+let map = new Map(
   new Array(obj.height).fill(0).map(() => new Array(obj.width).fill(0))
 );
 
@@ -251,11 +233,22 @@ for (let j = 0; j < obj.height; j++) {
   }
 }
 
-// TODO: Use WFC to make siomple level?
-
 function init() {
   SIZEX = width / map.map[0].length;
   SIZEY = height / map.map.length;
+  player.width = SIZEX;
+  player.height = SIZEY;
+  
+  machine1 = new OreCollector({
+    x: map.map[0].length / 2 - 1,
+    y: map.map.length / 2 - 1,
+    name: "Coal Collector",
+    interval: 5,
+    speed: 10,
+  });
+  machines.push(machine1);
+
+  requestAnimationFrame(render);
 }
 
 function render() {
@@ -266,6 +259,17 @@ function render() {
   player.update();
   player.draw();
 
-  // basicTileset.draw();
+  machines.forEach((machine, index) => {
+    machine.update();
+    machine.draw();
+  });
 }
-requestAnimationFrame(render);
+
+function onResize() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+  SIZEX = width / map.map[0].length;
+  SIZEY = height / map.map.length;
+}

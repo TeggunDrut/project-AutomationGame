@@ -91,7 +91,7 @@ function setup() {
   // EEE = grassLeft
 
   // Create and label the tiles
-  //                                                   TOP     RIGHT   BOTTOM  LEFT
+  //                                  TOP     RIGHT   BOTTOM  LEFT
   tiles[0] = new Tile(lib.grassTop, ["AAA", "BBB", "ZZZ", "BBB"]);
   tiles[1] = new Tile(lib.grass, ["AAA", "AAA", "AAA", "AAA"]);
   tiles[2] = new Tile(lib.dirt, ["ZZZ", "ZZZ", "ZZZ", "ZZZ"]); // dirt

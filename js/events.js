@@ -15,3 +15,6 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("keyup", (e) => {
   keys[e.key] = false;
 });
+window.onresize = () => {
+  onResize();
+};
